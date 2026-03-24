@@ -14,7 +14,7 @@ function preload() {
   // Load the handPose model
   const options = {
     maxHands: 2,
-    flipped: true,
+    flipped: false,
     runtime: "tfjs",
     modelType: "full",
     detectorModelUrl: undefined, //default to use the tf.hub model
@@ -27,10 +27,12 @@ function setup() {
   let cnv = createCanvas(640, 480);
   cnv.id("canvas");
   cnv.parent("canvasContainer");
+
   // Create the webcam video and hide it
-  video = createCapture(VIDEO);
+  video = createCapture(video);
   video.size(640, 480);
   video.hide();
+
   // start detecting hands from the webcam video
   handPose.detectStart(video, gotHands);
 }
@@ -46,7 +48,8 @@ function draw() {
       let keypoint = hand.keypoints[j];
       fill(0, 255, 0);
       noStroke();
-      circle(width - keypoint.x, keypoint.y, 10);
+      text(j, keypoint.x + 10, keypoint.y); // Label the keypoints with their index`
+      circle(keypoint.x, keypoint.y, 10);
     }
   }
   window.sharedData = { handPredictions: hands };
